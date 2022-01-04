@@ -2,7 +2,6 @@
 
 from dice import six_sided, four_sided, make_test_dice
 from ucb import main, trace, interact
-
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 FIRST_101_DIGITS_OF_PI = 31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
@@ -24,6 +23,44 @@ def roll_dice(num_rolls, dice=six_sided):
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
+    sum = 0
+    one = False
+    while(num_rolls > 0):
+        temp = dice()
+        if(temp == 1):
+            one = True
+        else:
+            sum += temp
+        num_rolls -= 1    
+    if(one == True):
+        return 1
+    else:
+        return sum
+# BAD CODE
+    # i = 0
+    # sum = 0
+    # while(i < num_rolls):
+    #     if(dice() == 1):
+    #         return 1
+    #     sum += dice()
+    #     i += 1
+    # return sum
+
+
+    # sum = 0
+    # i = 0
+    # one = False
+    # while(i < num_rolls):
+    #     temp = dice()
+    #     if(temp == 1):
+    #         return 1
+    #     else:
+    #         sum += temp
+    #     i += 1
+    # if(one == True):
+    #     return 1
+    # else:
+    #     return sum
 
 
 def free_bacon(score):
@@ -33,13 +70,11 @@ def free_bacon(score):
     """
     assert score < 100, 'The game should be over.'
     pi = FIRST_101_DIGITS_OF_PI
-
     # Trim pi to only (score + 1) digit(s)
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
     # END PROBLEM 2
-
-    return pi % 10 + 3
+    return (pi // pow(10,100-score)%10) + 3
 
 
 def take_turn(num_rolls, opponent_score, dice=six_sided):
@@ -58,6 +93,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
     # END PROBLEM 3
+    if(num_rolls == 0):
+        return free_bacon(opponent_score)
+    else:
+        return roll_dice(num_rolls, dice)
 
 
 def extra_turn(player_score, opponent_score):
@@ -79,7 +118,17 @@ def swine_align(player_score, opponent_score):
     """
     # BEGIN PROBLEM 4a
     "*** YOUR CODE HERE ***"
+    gcd = 1
+    for i in range(min(player_score, opponent_score) + 1,2,-1):
+        if player_score % i == 0 and opponent_score % i == 0:
+            gcd = i
+            break
+    if gcd >= 10:
+        return True
+    else:
+        return False
     # END PROBLEM 4a
+
 
 
 def pig_pass(player_score, opponent_score):
@@ -101,6 +150,10 @@ def pig_pass(player_score, opponent_score):
     """
     # BEGIN PROBLEM 4b
     "*** YOUR CODE HERE ***"
+    if(opponent_score <= player_score)or(opponent_score - player_score >= 3):
+        return False
+    else:    
+        return True
     # END PROBLEM 4b
 
 
@@ -139,13 +192,66 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 5
-    # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
-    # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+    
     # END PROBLEM 6
+    def over(score0,score1,goal):
+        if(score0 >= goal or score1 >= goal):
+            return True
+        else:
+            return False
+
+
+    while(True):
+        if(who == 0):
+            score0 += take_turn(strategy0(score0, score1), score1, dice)
+            say(score0, score1)
+            if(over(score0,score1,goal)):
+                break
+            if(not extra_turn(score0, score1)):
+                who = other(who)
+        else:
+            score1 += take_turn(strategy1(score1, score0), score0, dice)
+            say(score0, score1)
+            if(over(score0,score1,goal)):
+                break
+            if(not extra_turn(score1, score0)):
+                who = other(who)
+
+        # say(score0, score1) 
+
+        # if(over(score0,score1,goal)):
+        #     break
+
+        # if(extra_turn(score0, score1)):
+        #     if(who == 0):
+        #         score0 += take_turn(strategy0(score0, score1), score1, dice)
+        #     else:
+        #         score1 += take_turn(strategy1(score1, score0), score0, dice)
+        #     say(score0, score1)
+        # else:
+        #     who = other(who)
     return score0, score1
+
+    # while True:
+    #     if(who == 0):
+    #         score0 += take_turn(strategy0(score0, score1), score1, dice)
+    #         say(score0, score1)
+    #         if(score0 >= goal or score1 >= goal):
+    #             break
+            
+            
+    #     else:
+    #         score1 += take_turn(strategy1(score1, score0), score0, dice)
+    #         say(score0, score1)
+    #         if(score1 >= goal or score0 >= goal):
+    #             break
+            
+    #     if(extra_turn(score1, score0)==False):
+    #         who = other(who)
+    # return score0,score1
+            
+            
+
 
 
 #######################
