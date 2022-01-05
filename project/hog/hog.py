@@ -190,10 +190,11 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     goal:       The game ends and someone wins when this score is reached.
     say:        The commentary function to call at the end of the first turn.
     """
-    who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
+      # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     
     # END PROBLEM 6
+    who = 0
     def over(score0,score1,goal):
         if(score0 >= goal or score1 >= goal):
             return True
@@ -204,19 +205,24 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     while(True):
         if(who == 0):
             score0 += take_turn(strategy0(score0, score1), score1, dice)
-            say(score0, score1)
+            say=say(score0, score1)
             if(over(score0,score1,goal)):
                 break
+            
             if(not extra_turn(score0, score1)):
                 who = other(who)
+            # print('00',who)
+            
         else:
             score1 += take_turn(strategy1(score1, score0), score0, dice)
-            say(score0, score1)
+            say=say(score0, score1)
             if(over(score0,score1,goal)):
                 break
             if(not extra_turn(score1, score0)):
                 who = other(who)
-
+            # print('11',who)
+            
+      
         # say(score0, score1) 
 
         # if(over(score0,score1,goal)):
@@ -333,7 +339,20 @@ def announce_highest(who, last_score=0, running_high=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    
+    def say(score0, score1,LAST_SCORE= last_score,RUNNING_HIGH= running_high):
+        if who == 0:
+            if(score0 - LAST_SCORE > RUNNING_HIGH):
+                print(abs(score0 - LAST_SCORE), 'point(s)! The most yet for Player 0')
+                RUNNING_HIGH = score0 - LAST_SCORE
+            LAST_SCORE = score0
+        else:
+            if(score1 - LAST_SCORE > RUNNING_HIGH):
+                print(score1 - LAST_SCORE, 'point(s)! The most yet for Player 1')
+                RUNNING_HIGH = score1 - LAST_SCORE
+            LAST_SCORE = score1
+        return announce_highest(who, LAST_SCORE, RUNNING_HIGH)
+    return say
     # END PROBLEM 7
 
 
