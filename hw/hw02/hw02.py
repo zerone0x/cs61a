@@ -23,7 +23,12 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if(x < 8):
+        return 0
+    elif(x % 10 == 8):
+        return 1 + num_eights(x//10)
+    else:
+        return num_eights(x//10)
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -58,6 +63,22 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def help(n):
+        if(n<=7):
+            return 0
+        elif(num_eights(n)>0 or n % 8 == 0):
+            return 1 + help(n-1)
+        else:
+            return help(n-1)
+
+
+    if(n <= 7):
+        return n
+    elif(num_eights(n)>0 or n % 8 == 0):
+        return pingpong(n-1)+pow(-1,help(n-1))
+    else:
+        return pingpong(n-1)+pow(-1,help(n))
+
 
 
 def missing_digits(n):
@@ -89,9 +110,16 @@ def missing_digits(n):
     """
     "*** YOUR CODE HERE ***"
 
+    if(n < 10):
+        return 0
+    elif(n // 10 % 10 != n % 10 - 1 and n // 10 % 10 != n % 10):
+        return  n % 10 - 1 - (n // 10 % 10) + missing_digits(n // 10)
+    else:
+        return missing_digits(n // 10)
+
 
 def next_largest_coin(coin):
-    """Return the next coin. 
+    """Return the next coin.
     >>> next_largest_coin(1)
     5
     >>> next_largest_coin(5)
@@ -106,7 +134,18 @@ def next_largest_coin(coin):
         return 10
     elif coin == 10:
         return 25
-
+'''模式很简单，但很难套用进去。比如tree一般是从最大值开始分支，如果给的是小->大，就得先递减到最大值的临界点，然后再从这递归到最小值。'''
+def max(x):
+    if(x <= 1):
+        return 0
+    else:
+        i = x
+        while not next_largest_coin(i):
+            i-=1
+        if(x < next_largest_coin(i)):
+            return i
+        else:
+            return next_largest_coin(i)
 
 def count_coins(total):
     """Return the number of ways to make change for total using coins of value of 1, 5, 10, 25.
@@ -120,10 +159,27 @@ def count_coins(total):
     242
     >>> from construct_check import check
     >>> # ban iteration
-    >>> check(HW_SOURCE_FILE, 'count_coins', ['While', 'For'])                                          
+    >>> check(HW_SOURCE_FILE, 'count_coins', ['While', 'For'])
     True
     """
     "*** YOUR CODE HERE ***"
+    def count_partitions(n, m):
+        if n == 1 or n == 0:
+            return 1
+        elif n < 0:
+            return 0
+        elif m <= 0:
+            return 0
+        elif m == 1:
+            return 1
+        else:
+            with_m = count_partitions(n-max(m), max(m))
+            without_m = count_partitions(n, max(m-1))
+            return with_m + without_m
+    return count_partitions(total, max(total))
+
+
+
 
 
 from operator import sub, mul
@@ -138,5 +194,7 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    # return lambda n: 1 if n == 1 else mul(n, make_anonymous_factorial()(sub(n, 1)))
+    return (lambda f: lambda k: f(f,k)) (lambda f,k: 1 if k == 1 else k * f(f, sub(k,1)))
 
+""" 在lambda中写递归，需要将func本身作为func的参数传入。先定义func(func,k).再按照将函数传入"""
