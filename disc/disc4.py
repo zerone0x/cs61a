@@ -1,8 +1,8 @@
 def count_stair_ways(n):
     if n == 0:
-        return 0
+        return 1
     elif n ==1:
-        return 2
+        return 1
     else:
         return count_stair_ways(n-1) + count_stair_ways(n-2)
 
@@ -36,3 +36,4 @@ def max_product(s):
         return s[0]
     else:
         return max(s[0] * max_product(s[2:]), max_product(s[1:]))
+    '''slice 替代循环的index'''

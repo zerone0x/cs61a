@@ -1,5 +1,7 @@
 """Typing test implementation"""
 
+from queue import Empty
+from tkinter import E
 from utils import lower, split, remove_punctuation, lines_from_file
 from ucb import main, interact, trace
 from datetime import datetime
@@ -18,7 +20,15 @@ def choose(paragraphs, select, k):
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
-
+    empty = []
+    for i in range(len(paragraphs)):
+        if select(paragraphs[i]):
+            empty.append(paragraphs[i])
+    if k > len(empty)-1:
+        return ''
+    else:
+        return empty[k]
+    '''把符合的数据放到empty这个新list里面'''
 
 def about(topic):
     """Return a select function that returns whether a paragraph contains one
@@ -31,9 +41,25 @@ def about(topic):
     'Nice pup.'
     """
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
-    # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 2
+    
+    def exist(paragraph):
+        for i in range(len(topic)):
+            topic[i] = lower(topic[i])
+            paragraph0 = split(remove_punctuation(paragraph))
+            j = 0
+            for j in range(len(paragraph0)):
+                paragraph0[j] = lower(paragraph0[j])
+                if topic[i] == paragraph0[j]:
+                    sign = True # return 会停止循环，所以用signal
+                    break
+                else:
+                    sign = False
+            if sign == True:
+                return True
+        if sign == False:
+            return False
+    return exist
+    
 
 
 def accuracy(typed, reference):
@@ -53,18 +79,27 @@ def accuracy(typed, reference):
     >>> accuracy('', 'Cute Dog.')
     0.0
     """
-    typed_words = split(typed)
-    reference_words = split(reference)
+    typed_words, reference_words = split(typed), split(reference)
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 3
+    if len(typed) == 0:
+        return 0.0
+    else:
+        count = 0
+        for j in range(len(typed_words)):
+                if(len(reference_words) > j):
+                    if typed_words[j] == reference_words[j]:
+                        count += 1
+        return count / len(typed_words) * 100
 
 
 def wpm(typed, elapsed):
     """Return the words-per-minute (WPM) of the TYPED string."""
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    if typed == "":
+        return 0.0
+    else:
+        return len(typed) / 5 * 60 / elapsed
     # END PROBLEM 4
 
 
