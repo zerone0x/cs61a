@@ -108,9 +108,21 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     from USER_WORD. Instead returns USER_WORD if that difference is greater
     than LIMIT.
     """
-    # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 5
+    result = limit
+    for i in range(len(valid_words)):
+        if valid_words[i] == user_word:
+            return user_word
+        else:
+            result = min(diff_function(user_word, valid_words[i], limit), result)
+    if result == limit:
+        for i in range(len(valid_words)):
+            if diff_function(user_word, valid_words[i], limit) == limit:
+                return valid_words[i]
+        return user_word
+    else:
+        for i in range(len(valid_words)):
+            if diff_function(user_word, valid_words[i], limit) == result:
+                return valid_words[i]
 
 
 def shifty_shifts(start, goal, limit):
@@ -118,37 +130,75 @@ def shifty_shifts(start, goal, limit):
     in START need to be substituted to create GOAL, then adds the difference in
     their lengths.
     """
-    # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
-    # END PROBLEM 6
+    i = 0
+    def diff(start, goal, i):
+        if i > limit:
+            return i
+        elif len(goal) == 0:
+            return i + len(start) - len(goal)
+        elif len(start) == 0:
+            return i + len(goal) - len(start)
+        elif start[0] != goal[0]:
+            i += 1
+            return diff(start[1:],goal[1:],i)
+        else:
+            return diff(start[1:],goal[1:],i)
+        #Note slice recursion for list典型范例
+    if start == goal:
+        return 0
+    elif len(start) == 0:
+        return len(goal)
+    elif len(goal) == 0:
+        return len(start)
+    else:
+        return diff(start=start,goal=goal,i=i)
 
 
 def pawssible_patches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
-
-    if ______________: # Fill in the condition
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-
-    elif ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-
+    def diff(s,g,i):
+        # print(s)
+        if i > limit:
+            return i
+        elif len(g) == 0:
+            return i + len(s) - len(g)
+        elif len(s) == 0:
+            return i + len(g) - len(s)
+        elif s[0] != g[0]:
+            i += 1
+            
+            add_diff = shifty_shifts(g[0] + s[:], g, limit)
+            # print(g[0] + s)
+            # print(add_diff)
+            # print(s[1:])
+            # print(g,'rerere')
+            # print(s,'sssite:')
+            remove_diff = shifty_shifts(s[1:], g, limit)
+            substitute_diff = shifty_shifts(g[0] + s[1:], g, limit)
+            all = min(add_diff,remove_diff,substitute_diff)
+            # print(all)
+            if(all == 0):
+                return i
+            else:
+                return diff(s[1:],g[1:],i)
+        else:
+            return diff(s[1:],g[1:],i)
+        
+    if start == goal:
+        return 0
+    elif len(start) == 0:
+        return len(goal)
+    elif len(goal) == 0:
+        return len(start)
     else:
-        add_diff = ... # Fill in these lines
-        remove_diff = ...
-        substitute_diff = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+        return diff(s = start, g = goal, i = 0)
+
+
+        
 
 
 def final_diff(start, goal, limit):
     """A diff function. If you implement this function, it will be used."""
-    assert False, 'Remove this line to use your final_diff function'
 
 
 ###########
@@ -186,6 +236,7 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    
     # END PROBLEM 9
 
 

@@ -198,3 +198,5 @@ def make_anonymous_factorial():
     return (lambda f: lambda k: f(f,k)) (lambda f,k: 1 if k == 1 else k * f(f, sub(k,1)))
 
 """ 在lambda中写递归，需要将func本身作为func的参数传入。先定义func(func,k).再按照将函数传入"""
+# 本身需要2参数，但第2个参数就是函数本身，那就重新构建含有这个函数的函数
+# 利用已经构建好的函数
