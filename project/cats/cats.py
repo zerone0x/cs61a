@@ -238,6 +238,7 @@ def fastest_words(game):
     word_indices = range(len(all_words(game)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     fastest = [[] for _ in player_indices]
+# 创建一个固定长度的list中的list
     for i in word_indices:
         min_time = float('inf')
         player = 0
