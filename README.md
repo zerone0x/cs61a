@@ -11,4 +11,5 @@
 [22summer](https://cs61a.org/)<br />
 [参考](https://larynqi.com/su20)<br />
 [fraid video](https://farid.berkeley.edu/downloads/tutorials/learnPython/)<br />
+[中文版book](https://github.com/wizardforcel/sicp-py-zh)<br />
 
