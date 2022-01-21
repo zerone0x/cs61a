@@ -9,7 +9,7 @@
 [21summer](https://inst.eecs.berkeley.edu/~cs61a/su21/)<br />
 [21fall](https://inst.eecs.berkeley.edu/~cs61a/fa21/)<br />
 [22summer](https://cs61a.org/)<br />
-[参考](https://larynqi.com/su20)<br />
+[参考](https://naomijung.github.io/cs61a.html)<br />
 [fraid video](https://farid.berkeley.edu/downloads/tutorials/learnPython/)<br />
 [中文版book](https://github.com/wizardforcel/sicp-py-zh)<br />
 
