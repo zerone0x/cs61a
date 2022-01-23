@@ -25,7 +25,6 @@ def filter(iterable, fn):
     for x in iterable:
         if fn(x):
             yield x
-            yield iterable
 
 def merge(a, b):
    first_a, first_b = next(a), next(b)
