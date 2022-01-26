@@ -286,7 +286,6 @@ class FireAnt(Ant):
                 self.place.remove_insect(self)
                 self.death_callback()
             
-                   
 
         # END Problem 5
 
@@ -298,28 +297,44 @@ class HungryAnt(Ant):
     food_cost = 4
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 6
-    implemented = False   # Change to True to view in the GUI
+    time_to_digest = 3
+    implemented = True   # Change to True to view in the GUI
     # END Problem 6
 
     def __init__(self, armor=1):
-        # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
+        # TODO BEGIN Problem 6
+        Ant.__init__(self, armor)
+        self.digesting= 0
         # END Problem 6
 
     def eat_bee(self, bee):
         # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
+        dead_bee = rANTdom_else_none(bee)
+        if dead_bee:
+            dead_bee.reduce_armor(dead_bee.armor)
+            self.digesting = self.time_to_digest
+        else:
+            self.digesting -= 1
         # END Problem 6
 
     def action(self, gamestate):
         # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
+        if self.digesting > 0:
+            self.digesting -= 1
+        else:
+            self.eat_bee(self.place.bees)
         # END Problem 6
 
 
 
 # BEGIN Problem 7
 # The WallAnt class
+class WallAnt(Ant):
+    name = 'Wall'
+    food_cost = 4
+    implemented = True
+    def __init__(self, armor=4):
+        Ant.__init__(self, armor)
 # END Problem 7
 
 
