@@ -1,6 +1,9 @@
 """CS 61A presents Ants Vs. SomeBees."""
 
 import random
+from sys import implementation
+
+from black import is_type_comment
 from ucb import main, interact, trace
 from collections import OrderedDict
 
@@ -50,6 +53,7 @@ class Insect:
     """An Insect, the base class of Ant and Bee, has armor and a Place."""
 
     damage = 0
+    is_watersafe = False
     # ADD CLASS ATTRIBUTES HERE
 
     def __init__(self, armor, place=None):
@@ -101,9 +105,11 @@ class Insect:
 class Ant(Insect):
     """An Ant occupies a place and does work for the colony."""
 
-    implemented = False  # Only implemented Ant classes should be instantiated
+    implemented = True# Only implemented Ant classes should be instantiated
     food_cost = 0
     # ADD CLASS ATTRIBUTES HERE
+    buffed = False
+    is_container = False
 
     def __init__(self, armor=1):
         """Create an Ant with an ARMOR quantity."""
@@ -344,30 +350,48 @@ class Water(Place):
     def add_insect(self, insect):
         """Add an Insect to this place. If the insect is not watersafe, reduce
         its armor to 0."""
-        # BEGIN Problem 8
-        "*** YOUR CODE HERE ***"
+        # TODO cBEGIN Problem 8
+        Place.add_insect(self, insect)
+        if insect.is_watersafe == False:
+            insect.reduce_armor(insect.armor)
         # END Problem 8
 
 # BEGIN Problem 9
 # The ScubaThrower class
+class ScubaThrower(ThrowerAnt):
+    name = 'Scuba'
+    food_cost = 6
+    implemented = True
+    is_watersafe = True
+    def __init__(self, armor=1):
+        ThrowerAnt.__init__(self, armor)
+        
 # END Problem 9
 
 # BEGIN Problem EC
-class QueenAnt(Ant):  # You should change this line
-# END Problem EC
+class QueenAnt(ScubaThrower):  # You should change this line
+	# END Problem 13
     """The Queen of the colony. The game is over if a bee enters her place."""
 
     name = 'Queen'
     food_cost = 7
     # OVERRIDE CLASS ATTRIBUTES HERE
-    # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
-    # END Problem EC
+    # BEGIN Problem 13
+    implemented = True   # Change to True to view in the GUI
+    is_watersafe = True
+    real_queue = True
+    # END Problem 13
 
     def __init__(self, armor=1):
-        # BEGIN Problem EC
+        # BEGIN Problem 13
         "*** YOUR CODE HERE ***"
-        # END Problem EC
+        #ScubaThrower.__init__(self, armor)
+        self.armor = armor
+        self.real_queue = QueenAnt.real_queue
+        if self.real_queue:
+            QueenAnt.real_queue = False
+        self.ants = []
+        # END Problem 13
 
     def action(self, gamestate):
         """A queen ant throws a leaf, but also doubles the damage of ants
@@ -375,17 +399,43 @@ class QueenAnt(Ant):  # You should change this line
 
         Impostor queens do only one thing: reduce their own armor to 0.
         """
-        # BEGIN Problem EC
-        "*** YOUR CODE HERE ***"
-        # END Problem EC
+        # BEGIN Problem 13
+        if not self.real_queue:
+            self.reduce_armor(self.armor)
+        else:
+            behind = self.place.exit
+            while behind:
+                if behind.ant:
+                    if behind.ant not in self.ants:
+                        behind.ant.damage*=2
+                        self.ants.append(behind.ant)
+                    if isinstance(behind.ant,ContainerAnt) and behind.ant.contained_ant is not None:
+                        if behind.ant.contained_ant not in self.ants:
+                            behind.ant.contained_ant.damage *= 2
+                            self.ants.append(behind.ant.contained_ant)
+                behind = behind.exit
+            ScubaThrower.action(self, gamestate)
+        # END Problem 13
 
     def reduce_armor(self, amount):
         """Reduce armor by AMOUNT, and if the True QueenAnt has no armor
         remaining, signal the end of the game.
         """
-        # BEGIN Problem EC
+        # BEGIN Problem 13
         "*** YOUR CODE HERE ***"
-        # END Problem EC
+        if not self.real_queue:
+            ScubaThrower.reduce_armor(self,amount)
+        else:
+            self.armor -= amount
+            if self.armor <= 0:
+                self.place.remove_insect(self)
+                self.death_callback()
+                bees_win()
+
+    def remove_from(self, place):
+        if not self.real_queue:
+            ScubaThrower.remove_from(self, place)
+	
 
 
 
@@ -403,6 +453,7 @@ class Bee(Insect):
 
     name = 'Bee'
     damage = 1
+    is_watersafe = True
     # OVERRIDE CLASS ATTRIBUTES HERE
 
 
@@ -431,7 +482,8 @@ class Bee(Insect):
         destination = self.place.exit
         # Extra credit: Special handling for bee direction
         # BEGIN EC
-        "*** YOUR CODE HERE ***"
+        if self.place.ant:
+            self.place.ant.buffed = True
         # END EC
         if self.blocked():
             self.sting(self.place.ant)
