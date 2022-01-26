@@ -181,7 +181,10 @@ class ThrowerAnt(Ant):
                 bees = place.bees
             location += 1
             place = place.entrance
-        return rANTdom_else_none(bees)       
+        if bees:
+            return rANTdom_else_none(bees)
+        else:
+            return None     
         # END Problem 3 and 4
 
     def throw_at(self, target):
@@ -210,7 +213,6 @@ class ShortThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # TODO BEGIN Problem 4
-    armor = 1
     def __init__(self):
         self.max_range = 3
         self.armor = 1
@@ -239,8 +241,8 @@ class FireAnt(Ant):
     damage = 3
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
-    # BEGIN Problem 5
-    implemented = False   # Change to True to view in the GUI
+    # TODO BEGIN Problem 5
+    implemented = True   # Change to True to view in the GUI
     # END Problem 5
 
     def __init__(self, armor=3):
@@ -254,8 +256,38 @@ class FireAnt(Ant):
         Make sure to damage each bee in the current place, and apply the bonus
         if the fire ant dies.
         """
-        # BEGIN Problem 5
-        "*** YOUR CODE HERE ***"
+        # TODO BEGIN Problem 5
+        # Ant.reduce_armor(self, amount)
+        # if self.armor > 0:
+        #     if self.place.bees[:] != []:
+        #         bees = self.place.bees[:]
+        #         for bee in bees:
+        #             bee.reduce_armor(amount)
+        # if self.armor <= 0:
+        #     if self.place.bees[:] != []:
+        #         bees = self.place.bees[:]
+        #     for bee in bees:
+        #         bee.reduce_armor(self.damage+amount)
+        #     self.remove_ant()
+        if self.armor > amount:
+            Ant.reduce_armor(self, amount)
+            for bee in self.place.bees:
+                bee.reduce_armor(amount)
+        else:
+            self.armor -= amount
+            for bee in self.place.bees:
+                bee.reduce_armor(amount)
+            if self.armor <= 0:
+                # if self.place.bees[:] != []:
+                if len(self.place.bees) > 0:
+                    bees = self.place.bees[:]
+                    for bee in bees:
+                        bee.reduce_armor(self.damage)
+                self.place.remove_insect(self)
+                self.death_callback()
+            
+                   
+
         # END Problem 5
 
 class HungryAnt(Ant):
