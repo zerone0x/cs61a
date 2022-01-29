@@ -252,6 +252,7 @@ def path_yielder(t, value):
     """
     path = []
     path.append(t.label)
+    '''因为不管是不是叶子节点，都要把自己的label加进去，所以这里不用判断是否是叶子节点'''
     if t.label == value:
         yield path
     for i in t.branches:

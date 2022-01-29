@@ -104,7 +104,7 @@ class Insect:
 
 class Ant(Insect):
     """An Ant occupies a place and does work for the colony."""
-
+    blocks_path = True
     implemented = True# Only implemented Ant classes should be instantiated
     food_cost = 0
     # ADD CLASS ATTRIBUTES HERE
@@ -129,7 +129,11 @@ class Ant(Insect):
             place.ant = self
         else:
             # BEGIN Problem Optional 2
-            assert place.ant is None, 'Two ants in {0}'.format(place)
+            if place.ant.can_contain():
+                place.ant.contain_ant(self)
+                self.place = place
+            else:
+                assert place.ant is None, 'Two ants in {0}'.format(place)
             # END Problem Optional 2
         Insect.add_to(self, place)
 
@@ -377,7 +381,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
     food_cost = 7
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 13
-    implemented = True   # Change to True to view in the GUI
+    implemented = False# Change to True to view in the GUI
     is_watersafe = True
     real_queue = True
     # END Problem 13
@@ -470,7 +474,7 @@ class Bee(Insect):
         """Return True if this Bee cannot advance to the next Place."""
         # Special handling for NinjaAnt
         # BEGIN Problem Optional
-        return self.place.ant is not None
+        return self.place.ant is not None and self.place.ant.blocks_path == True
         # END Problem Optional
 
     def action(self, gamestate):
@@ -506,18 +510,20 @@ class NinjaAnt(Ant):
     """NinjaAnt does not block the path and damages all bees in its place.
     This class is optional.
     """
-
+    blocks_path = False
     name = 'Ninja'
     damage = 1
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem Optional 1
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem Optional 1
 
     def action(self, gamestate):
         # BEGIN Problem Optional 1
-        "*** YOUR CODE HERE ***"
+        place = self.place
+        for bee in place.bees[:]:
+            bee.reduce_armor(self.damage)
         # END Problem Optional 1
 
 class ContainerAnt(Ant):
@@ -527,12 +533,14 @@ class ContainerAnt(Ant):
 
     def can_contain(self, other):
         # BEGIN Problem Optional 2
-        "*** YOUR CODE HERE ***"
+        if self.contained_ant == None and not other.is_container :
+            return True
+        return False
         # END Problem Optional 2
 
     def contain_ant(self, ant):
         # BEGIN Problem Optional 2
-        "*** YOUR CODE HERE ***"
+        self.contain_ant = ant
         # END Problem Optional 2
 
     def remove_ant(self, ant):
@@ -552,7 +560,8 @@ class ContainerAnt(Ant):
 
     def action(self, gamestate):
         # BEGIN Optional 2
-        "*** YOUR CODE HERE ***"
+        if self.contain_ant:
+            self.contain_ant.action(gamestate)
         # END Optional 2
 
 class BodyguardAnt(ContainerAnt):
@@ -562,7 +571,10 @@ class BodyguardAnt(ContainerAnt):
     food_cost = 4
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Optional 2
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    def __init__(self, *args, **kwargs):
+        ContainerAnt.__init__(self, *args, **kwargs)
+        self.contained_ant = None
     # END Optional 2
 
 class TankAnt(ContainerAnt):
@@ -573,15 +585,16 @@ class TankAnt(ContainerAnt):
     food_cost = 6
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem Optional 3
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem Optional 3
 
     def __init__(self, armor=2):
         ContainerAnt.__init__(self, armor)
 
     def action(self, gamestate):
-        # BEGIN Problem Optional 3
-        "*** YOUR CODE HERE ***"
+        # TODO BEGIN Problem Optional 3
+        for bee in self.place.bees[:]:
+            bee.reduce_armor(self.damage)
         # END Problem Optional 3
 ############
 # Statuses #
