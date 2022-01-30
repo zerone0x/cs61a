@@ -77,9 +77,6 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    # if link.rest.rest.rest  == link: 
-    #     return True
-    # return False 
     a = link
     while link:
         if link.rest == a:
@@ -121,7 +118,18 @@ def reverse_other(t):
     >>> t
     Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
     """
-    
+    # official solution
+    def help(t, need_reverse):
+        if t.is_leaf():
+            return t
+        reverse_node = [child.label for child in t.branches][::-1]
+        for i in range(len(t.branches)):
+            child = t.branches[i]
+            help(child, not need_reverse)
+            if need_reverse:
+                child.label = reverse_node[i]
+    help(t, True)
+        
     
 
 
