@@ -13,3 +13,6 @@
 [fraid video](https://farid.berkeley.edu/downloads/tutorials/learnPython/)<br />
 [中文版book](https://github.com/wizardforcel/sicp-py-zh)<br />
 
+---
+[study guide](https://cs61a.org/assets/pdfs/61a-mt1-study-guide.pdf)<br />
+[study guide2](https://cs61a.org/assets/pdfs/61a-mt2-study-guide.pdf)<br />    
