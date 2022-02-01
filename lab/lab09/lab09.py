@@ -7,7 +7,7 @@ def insert_into_all(item, nested_list):
     >>> insert_into_all(0, nl)
     [[0], [0, 1, 2], [0, 3]]
     """
-    return ______________________________
+    return [i + [item] for i in nested_list]
 
 def subseqs(s):
     """Assuming that S is a list, return a nested list of all subsequences
@@ -19,13 +19,12 @@ def subseqs(s):
     >>> subseqs([])
     [[]]
     """
-    if ________________:
-        ________________
+    if s is []:
+        return [[]]
     else:
-        ________________
-        ________________
-
-
+        subset = subseqs(s[1:])
+        return insert_into_all(s[0], subset) + subset
+    
 def inc_subseqs(s):
     """Assuming that S is a list, return a nested list of all subsequences
     of S (a list of lists) for which the elements of the subsequence
@@ -42,14 +41,14 @@ def inc_subseqs(s):
     """
     def subseq_helper(s, prev):
         if not s:
-            return ____________________
+            return [[]]
         elif s[0] < prev:
-            return ____________________
+            return subseq_helper(s[1:], prev)
         else:
-            a = ______________________
-            b = ______________________
-            return insert_into_all(________, ______________) + ________________
-    return subseq_helper(____, ____)
+            a = subseq_helper(s[1:], s[0])
+            b = subseq_helper(s[1:], prev)
+            return insert_into_all(s[0], a) + b
+    return subseq_helper(s, 0)
 
 
 def num_trees(n):
@@ -72,9 +71,9 @@ def num_trees(n):
     429
 
     """
-    if ____________________:
-        return _______________
-    return _______________
+    if n <= 2:
+        return 1
+    return sum(num_trees(n-k) * num_trees(k) for k in range(1, n))
 
 
 def make_generators_generator(g):
@@ -112,17 +111,23 @@ def make_generators_generator(g):
     9
     """
     def gen(i):
-        for ___________ in ___________:
-            if _________________________:
-                _________________________
-            _______________________
-            _______________________
-    __________________________
-    for _________ in __________________:
-        ______________________________
-        ______________________________
+        te = g()
+        for _ in range(i):
+            yield next(te)
+    length = len(list(g()))
+    for i in range(1, length + 1):
+        yield gen(i)
+        
+    # def helper(g, i):
+    #     gen = g()
+    #     for _ in range(i):
+    #         yield next(gen)
 
-
+    # length = len(list(g()))
+    # for i in range(1, length + 1):
+    #     yield helper(g, i)
+        
+        
 class Button:
     """
     Represents a single button
@@ -159,27 +164,26 @@ class Keyboard:
     """
 
     def __init__(self, *args):
-        ________________
-        for _________ in ________________:
-            ________________
+        self.buttons = {}
+        for button in buttons:
+            self.buttons[button.pos] = button
 
     def press(self, info):
         """Takes in a position of the button pressed, and
         returns that button's output"""
-        if ____________________:
-            ________________
-            ________________
-            ________________
-        ________________
+        if info == self.buttons.pos:
+            self.times_pressed += 1
+            return self.key
 
     def typing(self, typing_input):
         """Takes in a list of positions of buttons pressed, and
         returns the total output"""
-        ________________
-        for ________ in ____________________:
-            ________________
-        ________________
-
+        res = ''
+        for i in typing_input:
+                if i == self.pos:
+                    self.times_pressed += 1
+                    res += self.key
+        return res
 
 def make_advanced_counter_maker():
     """Makes a function that makes counters that understands the
