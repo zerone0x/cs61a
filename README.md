@@ -3,6 +3,7 @@
 [onlinetutor](https://pythontutor.com/composingprograms.html#mode=edit)<br />
 [hint of hw](https://www.youtube.com/channel/UCuteugW6eO65Awk83I6ehoA)<br />
 [debug](https://inst.eecs.berkeley.edu/~cs61a/fa20/articles/debugging.html#interactive-debugging)<br />
+[10](https://inst.eecs.berkeley.edu/~cs61a/fa10/)<br />
 [11spring](https://archive.org/details/ucberkeley-webcast-PL3E89002AA9B9879E?sort=titleSorter)<br />
 [18fall](https://www.youtube.com/watch?v=Tkciq5IQVp0&list=PLItDYn6dy-i2RKRTOK30ihu7uFCZesZTJ)<br />
 [21spring](https://inst.eecs.berkeley.edu/~cs61a/sp21/)<br />
