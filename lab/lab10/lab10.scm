@@ -34,8 +34,7 @@
   (cond ((null? lst) '())
         ((eq? item (car lst)) (remove item (cdr lst)))
         (else (cons (car lst) (remove item (cdr lst))))))
-
-
+        
 ;;; Tests
 (remove 3 nil)
 ; expect ()
