@@ -17,3 +17,8 @@
 ---
 [study guide](https://cs61a.org/assets/pdfs/61a-mt1-study-guide.pdf)<br />
 [study guide2](https://cs61a.org/assets/pdfs/61a-mt2-study-guide.pdf)<br />    
+
+---
+## scheme
+[core 1](https://inst.eecs.berkeley.edu/~cs61a/fa20/articles/scheme-builtins.html)<br />
+[core 2](https://inst.eecs.berkeley.edu/~cs61a/fa20/articles/scheme-spec.html)<br />

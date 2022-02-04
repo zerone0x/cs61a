@@ -23,3 +23,5 @@
   ((= x 1) 1)
   ((= 1 (modulo y 2)) (* x (pow x (/ (- y 1) 2)) (pow x (/ (- y 1) 2))))
   (else (* (pow x (/ y 2)) (pow x (/ y 2))))))
+
+  '该抽象出square
