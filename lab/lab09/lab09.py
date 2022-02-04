@@ -400,7 +400,6 @@ def prune_small(t, n):
     while len(t.branches) > n:
         largest = max(t.branches, key=lambda x: x.label)
         t.branches.remove(largest)
-        
     for i in t.branches:
         prune_small(i, n)
 
