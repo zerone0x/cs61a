@@ -19,3 +19,13 @@ def fib(n):
         return n
     else:
         return fib(n-1) + fib(n-2)
+
+    
+def norepeat(lst):
+    if lst == ():
+        return lst
+    else:
+        if lst[0] not in lst[1:]:
+            return norepeat(lst[1:]) + [lst[0]]
+        else:
+            return norepeat(lst[1:])
