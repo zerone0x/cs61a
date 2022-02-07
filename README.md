@@ -22,3 +22,5 @@
 ## scheme
 [core 1](https://inst.eecs.berkeley.edu/~cs61a/fa20/articles/scheme-builtins.html)<br />
 [core 2](https://inst.eecs.berkeley.edu/~cs61a/fa20/articles/scheme-spec.html)<br />
+---
+[sicp textbook](https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-4.html#%_toc_start)<br />
