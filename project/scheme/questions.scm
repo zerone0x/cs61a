@@ -13,8 +13,12 @@
 ;; Returns a list of two-element lists
 (define (enumerate s)
   ; BEGIN PROBLEM 15
-  'replace-this-line
-  )
+  (define (help s n)
+  (if (null? s)
+      s
+    (cons (list n (car s)) (help (cdr s) (+ n 1)))))
+    (help s 0)
+)
   ; END PROBLEM 15
 
 ;; Problem 16
@@ -23,8 +27,13 @@
 ;; the merged lists.
 (define (merge comp list1 list2)
   ; BEGIN PROBLEM 16
-  'replace-this-line
-  )
+  (if (null? list1)
+      list2
+    (if (null? list2)
+        list1
+      (if (comp (car list1) (car list2))
+          (cons (car list1) (merge comp (cdr list1) list2))
+        (cons (car list2) (merge comp list1 (cdr list2)))))))
   ; END PROBLEM 16
 
 
@@ -37,8 +46,11 @@
 
 (define (nondecreaselist s)
     ; BEGIN PROBLEM 17
-    'replace-this-line
-    )
+    (cond
+      ((null? s) s)
+      ((null? (cdr s)) (list s))
+      ((<= (car s) (car (cdr s))) (cons (cons (car s) (car (nondecreaselist (cdr s)))) (cdr (nondecreaselist (cdr s)))))
+      (else (cons (list(car s)) (nondecreaselist (cdr s))))))
     ; END PROBLEM 17
 
 ;; Problem EC

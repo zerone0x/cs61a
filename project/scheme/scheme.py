@@ -132,8 +132,7 @@ class Frame(object):
         f = Frame(self)
         while formals is not nil:
             f.define(formals.first, vals.first)
-            formals = formals.rest
-            vals = vals.rest
+            formals, vals = formals.rest, vals.rest
         return f
         # END PROBLEM 10
 
@@ -340,7 +339,16 @@ def do_and_form(expressions, env):
     False
     """
     # BEGIN PROBLEM 12
-    "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return True
+    elif expressions.rest is nil:
+        return scheme_eval(expressions.first, env, True)
+    else:
+        first_expr = scheme_eval(expressions.first, env)
+        if is_false_primitive(first_expr):
+            return False
+        else:
+            return do_and_form(expressions.rest, env)
     # END PROBLEM 12
 
 def do_or_form(expressions, env):
@@ -357,7 +365,16 @@ def do_or_form(expressions, env):
     6
     """
     # BEGIN PROBLEM 12
-    "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return False
+    elif expressions.rest is nil:
+        return scheme_eval(expressions.first, env)
+    else:
+        first_expr = scheme_eval(expressions.first, env)
+        if is_true_primitive(first_expr):
+            return first_expr
+        else:
+            return do_or_form(expressions.rest, env)
     # END PROBLEM 12
 
 def do_cond_form(expressions, env):
@@ -377,7 +394,9 @@ def do_cond_form(expressions, env):
             test = scheme_eval(clause.first, env)
         if is_true_primitive(test):
             # BEGIN PROBLEM 13
-            "*** YOUR CODE HERE ***"
+            if clause.rest is nil:
+                return test
+            return eval_all(clause.rest, env)
             # END PROBLEM 13
         expressions = expressions.rest
 
@@ -401,7 +420,13 @@ def make_let_frame(bindings, env):
         raise SchemeError('bad bindings list in let form')
     names, values = nil, nil
     # BEGIN PROBLEM 14
-    "*** YOUR CODE HERE ***"
+    while bindings is not nil:
+        validate_form(bindings.first, 2, 2)
+        val = scheme_eval(bindings.first.rest.first, env)
+        names = Pair(bindings.first.first, names)
+        validate_formals(names)
+        values = Pair(val, values)
+        bindings = bindings.rest
     # END PROBLEM 14
     return env.make_child_frame(names, values)
 
