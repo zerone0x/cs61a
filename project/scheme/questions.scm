@@ -65,35 +65,35 @@
 
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (let-to-lambda expr)
-  (cond ((atom? expr)
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )
-        ((quoted? expr)
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )
-        ((or (lambda? expr)
-             (define? expr))
-         (let ((form   (car expr))
-               (params (cadr expr))
-               (body   (cddr expr)))
-           ; BEGIN PROBLEM EC
-           'replace-this-line
-           ; END PROBLEM EC
-           ))
-        ((let? expr)
-         (let ((values (cadr expr))
-               (body   (cddr expr)))
-           ; BEGIN PROBLEM EC
-           'replace-this-line
-           ; END PROBLEM EC
-           ))
-        (else
-         ; BEGIN PROBLEM EC
-         'replace-this-line
-         ; END PROBLEM EC
-         )))
+	  (cond ((atom? expr)
+	         ; BEGIN PROBLEM EC
+	         'replace-this-line
+	         ; END PROBLEM EC
+	         )
+	        ((quoted? expr)
+	         ; BEGIN PROBLEM EC
+	         'replace-this-line
+	         ; END PROBLEM EC
+	         )
+	        ((or (lambda? expr)
+	             (define? expr))
+	         (let ((form   (car expr))
+	               (params (cadr expr))
+	               (body   (cddr expr)))
+	           ; BEGIN PROBLEM EC
+	           'replace-this-line
+	           ; END PROBLEM EC
+	           ))
+	        ((let? expr)
+	         (let ((values (cadr expr))
+	               (body   (cddr expr)))
+	           ; BEGIN PROBLEM EC
+	           'replace-this-line
+	           ; END PROBLEM EC
+	           ))
+	        (else
+	         ; BEGIN PROBLEM EC
+	         'replace-this-line
+	         ; END PROBLEM EC
+	         )))
 

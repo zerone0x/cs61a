@@ -552,7 +552,7 @@ class MuProcedure(Procedure):
         self.body = body
 
     # BEGIN PROBLEM 18
-    "*** YOUR CODE HERE ***"
+    
     # END PROBLEM 18
 
     def __str__(self):
@@ -568,7 +568,7 @@ def do_mu_form(expressions, env):
     formals = expressions.first
     validate_formals(formals)
     # BEGIN PROBLEM 18
-    "*** YOUR CODE HERE ***"
+
     # END PROBLEM 18
 
 SPECIAL_FORMS['mu'] = do_mu_form
