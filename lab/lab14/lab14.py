@@ -1,4 +1,5 @@
 from operator import add, sub, mul
+from turtle import pos
 
 
 def prune_min(t):
@@ -17,9 +18,14 @@ def prune_min(t):
     >>> t3
     Tree(6, [Tree(3, [Tree(1)])])
     """
-    "*** YOUR CODE HERE ***"
-
-
+    if len(t.branches) == 0:
+        return 
+    prune_min(t.branches[0])        
+    prune_min(t.branches[1])
+    if t.branches[0].label < t.branches[1].label:
+        t.branches.pop(1)
+    else:
+        t.branches.pop(0)    
 def num_splits(s, d):
     """Return the number of ways in which s can be partitioned into two
     sublists that have sums within d of each other.
@@ -33,7 +39,13 @@ def num_splits(s, d):
     >>> num_splits([1, 4, 6, 8, 2, 9, 5], 3)
     12
     """
-    "*** YOUR CODE HERE ***"
+    def help(s, n):
+        if len(s) == 0:
+            return 1 if abs(n) <= d else 0
+        else:
+            first, rest= s[0], s[1:]
+            return help(rest, n + first) + help(rest, n - first)
+    return help(s, 0)//2
 
 
 class Account(object):
@@ -97,13 +109,23 @@ class CheckingAccount(Account):
 
     def withdraw(self, amount):
         return Account.withdraw(self, amount + self.withdraw_fee)
-
-    "*** YOUR CODE HERE ***"
+    
+    def deposit_check(self, check):
+        if not check.valid or self.holder != check.name:
+            print('The police have been notified.')
+        else:
+            check.valid = False
+            return check.amount
 
 class Check(object):
-    "*** YOUR CODE HERE ***"
-
-
+    def __init__(self, name, amount):
+        self.name = name 
+        self.amount = amount
+        self.valid = True
+    @property
+    def deposited(self):
+        return not self.valid
+    
 def align_skeleton(skeleton, code):
     """
     Aligns the given skeleton with the given code, minimizing the edit distance between
@@ -138,31 +160,31 @@ def align_skeleton(skeleton, code):
             cost: the cost of the corrections, in edits
         """
         if skeleton_idx == len(skeleton) and code_idx == len(code):
-            return _________, ______________
+            return "", 0
         if skeleton_idx < len(skeleton) and code_idx == len(code):
             edits = "".join(["-[" + c + "]" for c in skeleton[skeleton_idx:]])
-            return _________, ______________
+            return edits, len(skeleton) - skeleton_idx
         if skeleton_idx == len(skeleton) and code_idx < len(code):
             edits = "".join(["+[" + c + "]" for c in code[code_idx:]])
-            return _________, ______________
+            return edits, len(code) - code_idx
         
         possibilities = []
         skel_char, code_char = skeleton[skeleton_idx], code[code_idx]
         # Match
         if skel_char == code_char:
-            _________________________________________
-            _________________________________________
-            possibilities.append((_______, ______))
+            result, cost = helper_align(skeleton_idx + 1, code_idx + 1)
+            new_result = skel_char + result
+            possibilities.append((new_result, cost))
         # Insert
-        _________________________________________
-        _________________________________________
-        possibilities.append((_______, ______))
+        result1, cost1 = helper_align(skeleton_idx, code_idx + 1)
+        new_result1 = "+[" + code_char + "]" + result1
+        possibilities.append((new_result1, cost1 + 1))
         # Delete
-        _________________________________________
-        _________________________________________
-        possibilities.append((_______, ______))
+        result2, cost2 = helper_align(skeleton_idx + 1, code_idx)
+        new_result2 = "-[" + skel_char + "]" + result2
+        possibilities.append((new_result2, cost2 + 1))
         return min(possibilities, key=lambda x: x[1])
-    result, cost = ________________________
+    result, cost = helper_align(0, 0)
     return result
 
 
