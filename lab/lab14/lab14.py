@@ -255,6 +255,7 @@ def foldl2(link, fn, z):
     def step(x, g):
         return lambda a: g(fn(a, x))
     return foldr(link, step, identity)(z)
+# 没搞明白TODO
 
 
 class Tree:
