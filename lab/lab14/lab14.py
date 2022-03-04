@@ -200,8 +200,7 @@ def foldl(link, fn, z):
     """
     if link is Link.empty:
         return z
-    "*** YOUR CODE HERE ***"
-    return foldl(______, ______, ______)
+    return foldl(link.rest, fn, fn(z, link.first))
 
 
 def filterl(lst, pred):
@@ -210,8 +209,11 @@ def filterl(lst, pred):
     >>> filterl(lst, lambda x: x % 2 == 0)
     Link(4, Link(2))
     """
-    "*** YOUR CODE HERE ***"
-
+    if lst is Link.empty:
+        return lst
+    if pred(lst.first):
+        return Link(lst.first, filterl(lst.rest, pred))
+    return filterl(lst.rest, pred)
 
 def reverse(lst):
     """ Reverses LST with foldl
@@ -223,8 +225,20 @@ def reverse(lst):
     >>> reversed is Link.empty
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    return foldl(lst, lambda acc, x: Link(x, acc), Link.empty)
+def foldr(link, fn, z):
+    """ Right fold
+    >>> lst = Link(3, Link(2, Link(1)))
+    >>> foldr(lst, sub, 0) # (3 - (2 - (1 - 0)))
+    2
+    >>> foldr(lst, add, 0) # (3 + (2 + (1 + 0)))
+    6
+    >>> foldr(lst, mul, 1) # (3 * (2 * (1 * 1)))
+    6
+    """
+    if link is Link.empty:
+        return z
+    return fn(link.first, foldr(link.rest, fn, z))
 
 identity = lambda x: x
 
@@ -239,7 +253,7 @@ def foldl2(link, fn, z):
     6
     """
     def step(x, g):
-        "*** YOUR CODE HERE ***"
+        return lambda a: g(fn(a, x))
     return foldr(link, step, identity)(z)
 
 
