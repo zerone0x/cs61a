@@ -19,4 +19,11 @@ def mergesort(seq):
     
 
 def long_path(tree, n):
+    path =[]
+    if not tree.branches and n <= 0:
+        path.append(Link(tree.entry))
+    for b in tree.branches:
+        for path in long_path(b, n - 1):
+            path.append(Link(b.entry, path))
+    return paths
     
